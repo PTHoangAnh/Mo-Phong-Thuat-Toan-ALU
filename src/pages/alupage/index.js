@@ -1,9 +1,9 @@
 import React from "react";
 import { toast } from 'react-toastify';
-import InputField from "./inputField";
-import SelectBits from "./selectBit";
-import { decimalToBinary, binaryToDecimal } from "../../../utilites/convertDecBin";
-import AddArithmetic from "./addArithmetic";
+import InputField from "./components/inputField";
+import SelectBits from "./components/selectBit";
+import { decimalToBinary, binaryToDecimal } from "../../utilites/convertDecBin";
+import AddArithmetic from "./components/addArithmetic";
 
 class TestALU extends React.Component {
     state = {

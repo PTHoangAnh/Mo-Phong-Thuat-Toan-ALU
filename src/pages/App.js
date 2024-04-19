@@ -1,7 +1,7 @@
 import './App.scss';
 import ListTest from './homepage/components/list/listTest.js';
 import About from './aboutpage/components/about.js';
-import TestALU from './alupage/components/testALU.js';
+import TestALU from './alupage/index.js';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Nav from './Nav/Nav.js';
@@ -22,7 +22,7 @@ function App() {
           <Routes>
             <Route path="/" element={<ListTest />} />
             <Route path="/about" element={<About />} />
-            <Route path="/testALU" element={<TestALU />} />
+            <Route path="/alu" element={<TestALU />} />
           </Routes>
         </header>
 

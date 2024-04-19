@@ -7,13 +7,13 @@ class Nav extends React.Component {
         return (
             <div className="topnav">
                 <NavLink to="/" activeClassName="active" exact={true}>
-                    Trang chủ
+                    Home
                 </NavLink>
                 <NavLink to="/about" activeClassName="active">
                     About
                 </NavLink>
-                <NavLink to="/testALU" activeClassName="active">
-                    Mô phỏng thuật toán
+                <NavLink to="/alu" activeClassName="active">
+                    ALU
                 </NavLink>
             </div>
         )
