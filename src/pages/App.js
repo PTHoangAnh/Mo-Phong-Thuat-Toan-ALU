@@ -1,7 +1,7 @@
 import './App.scss';
 import ListTest from './homepage/components/list/listTest.js';
 import About from './aboutpage/components/about.js';
-import TestALU from './testALU/components/testALU.js';
+import TestALU from './alupage/components/testALU.js';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Nav from './Nav/Nav.js';
