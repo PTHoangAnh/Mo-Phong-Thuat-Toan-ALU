@@ -1,5 +1,4 @@
 import './App.scss';
-import Home from './homepage/index.jsx';
 import About from './aboutpage/index.jsx';
 import ALU from './alupage/index.js';
 import { ToastContainer } from 'react-toastify';
@@ -20,9 +19,8 @@ function App() {
         <header className="App-header">
           <Nav />
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<ALU />} />
             <Route path="/about" element={<About />} />
-            <Route path="/alu" element={<ALU />} />
           </Routes>
         </header>
 

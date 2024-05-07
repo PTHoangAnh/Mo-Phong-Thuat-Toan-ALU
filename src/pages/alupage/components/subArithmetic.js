@@ -1,17 +1,18 @@
 import React from "react";
 import { toast } from 'react-toastify';
-import './arithmetic.scss'
+import './arithmetic.scss';
 
-class AddArithmetic extends React.Component {
+class SubArithmetic extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             steps: [],
-            sumResult: [],
             binaryResult_Array: [],
             currentStep: 0,
-            flagOverflow: false,// Khởi tạo cờ Overflow
-            currentStepIndex: 0
+            flagOverflow: false,
+            currentStepIndex: 0,
+            complementBin: [],
+
         };
     }
 
@@ -32,22 +33,42 @@ class AddArithmetic extends React.Component {
 
     calculateSteps() {
         const { registerInputA_Bin, registerInputB_Bin, numBits } = this.props;
+        const { complementBin } = this.state;
         const binaryA = registerInputA_Bin.padStart(numBits, '0').split('').map(bit => parseInt(bit, 10));
         const binaryB = registerInputB_Bin.padStart(numBits, '0').split('').map(bit => parseInt(bit, 10));
+
+        // Thực hiện phép đảo bit (complement) của binaryB
+        let complementB = binaryB.map(bit => (bit === 0 ? 1 : 0));
+
+        // Thực hiện phép cộng 1 để có số bù 2 của binaryB
+        let carry = 1;
+        for (let i = numBits - 1; i >= 0; i--) {
+            let sum = complementB[i] + carry;
+            complementB[i] = sum % 2;
+            carry = Math.floor(sum / 2);
+        }
+        let spot = [...complementB]
+        // Hiển thị binaryB dưới dạng số bù hai
+        for (let i = 0; i < numBits; i++) {
+            spot[i] = spot[i] === 0 ? 1 : 0;
+        }
+
+        this.setState({ complementBin: spot });
+
+        // Thực hiện phép cộng của binaryA với số bù 2 của binaryB
         let result = [];
-        let carry = 0;
         let steps = [];
-        let sumResult = [];  // nên lưu sum mỗi step vào mảng này để xử lý say này
         let binaryResult_Array = [];
+        carry = 0;
 
         for (let i = 0; i < numBits; i++) {
-            const sum = binaryA[numBits - i - 1] + binaryB[numBits - i - 1] + carry;
+            const sum = binaryA[numBits - i - 1] + complementB[numBits - i - 1] + carry;
             result.unshift(sum % 2);
             let currentSumResult = [...result];
             steps.push({
                 step: i + 1,
                 binaryA: binaryA.slice(numBits - i - 1).join(''),
-                binaryB: binaryB.slice(numBits - i - 1).join(''),
+                binaryB: complementB.slice(numBits - i - 1).join(''),
                 sum: sum % 2,
                 carry: Math.floor(sum / 2),
                 sumResult: currentSumResult.join('')
@@ -55,9 +76,8 @@ class AddArithmetic extends React.Component {
             carry = Math.floor(sum / 2);
             binaryResult_Array.unshift(sum % 2);
         }
-        this.setState({ steps: steps, binaryResult_Array: binaryResult_Array });
+        this.setState({ steps: steps, binaryResult_Array: binaryResult_Array, complementBin: spot });
     }
-
 
     handleNextStep = () => {
         const { currentStep, steps } = this.state;
@@ -74,8 +94,6 @@ class AddArithmetic extends React.Component {
         }
     }
 
-
-
     handlePreviousStep = () => {
         const { currentStep } = this.state;
         this.setState({ flagOverflow: false });
@@ -84,15 +102,12 @@ class AddArithmetic extends React.Component {
         }
     }
 
-
-
     render() {
-        const { steps, binaryResult_Array, currentStep, flagOverflow } = this.state;
+        const { steps, binaryResult_Array, currentStep, flagOverflow, complementBin } = this.state;
         const { registerInputA_Bin, registerInputB_Bin, numBits } = this.props;
 
         const binaryA_Array = registerInputA_Bin.split('').map(bit => parseInt(bit, 10));
         const binaryB_Array = registerInputB_Bin.split('').map(bit => parseInt(bit, 10));
-
 
         return (
             <div className="simulate">
@@ -100,7 +115,7 @@ class AddArithmetic extends React.Component {
                     <table className="process-table">
                         <thead>
                             <tr>
-                                <th className="numbit-thead">Thứ tự bit</th>
+                                <th>Thứ tự bit</th>
                                 {Array(numBits)
                                     .fill()
                                     .map((_, index) => (
@@ -134,8 +149,8 @@ class AddArithmetic extends React.Component {
                 </div>
                 <h2>Các bước tính toán</h2>
                 <div>
-                    <button onClick={this.handlePreviousStep} disabled={currentStep === 0}>Trước</button>
-                    <button onClick={this.handleNextStep} disabled={currentStep === steps.length - 1}>Tiếp</button>
+                    <button onClick={this.handlePreviousStep} disabled={currentStep === 0}>Prev</button>
+                    <button onClick={this.handleNextStep} disabled={currentStep === steps.length - 1}>Next</button>
                 </div>
                 <div>
                     <h3>Bước hiện tại: {currentStep + 1}</h3>
@@ -162,44 +177,33 @@ class AddArithmetic extends React.Component {
                                 ))}
                             </tr>
                             <tr>
-                                <td>Thanh ghi B</td>
-                                {binaryB_Array.map((bit, index) => (
+                                <td>Thanh ghi B </td>
+                                {complementBin.map((bit, index) => (
                                     <td key={index} className={currentStep === numBits - index - 1 ? "highlight-column" : ""}>
-                                        {bit}
+                                        {bit === 0 ? 1 : 0}
                                     </td>
                                 ))}
                             </tr>
                             <tr>
-                                <td>Thanh ghi kết quả</td>
+                                <td>Thanh ghi Result</td>
                                 {Array(numBits)
                                     .fill()
                                     .map((_, index) => (
                                         <td key={index} className={currentStep === numBits - index - 1 ? "highlight-column" : ""}>
-
                                             {steps[currentStep]?.sumResult.split('').reverse()[numBits - index - 1] || '0'}
                                         </td>
-
-
                                     ))}
                             </tr>
                         </tbody>
-
-
-
-
-
-
                     </table>
-
                     <table className="flag-table">
                         <tbody>
-
                             <tr>
                                 <td>Cờ Sum </td>
                                 <td >{steps[currentStep]?.sum}</td>
                             </tr>
                             <tr>
-                                <td> Cờ Carry </td>
+                                <td>Cờ Carry </td>
                                 <td >{steps[currentStep]?.carry}</td>
                             </tr>
                             <tr>
@@ -207,13 +211,11 @@ class AddArithmetic extends React.Component {
                                 <td >{flagOverflow ? '1' : '0'}</td>
                             </tr>
                         </tbody>
-
                     </table>
                 </div>
-
             </div>
         );
     }
 }
 
-export default AddArithmetic;
+export default SubArithmetic;

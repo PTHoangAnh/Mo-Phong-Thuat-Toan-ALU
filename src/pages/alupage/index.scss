@@ -1,0 +1,57 @@
+.app-arithmetic {
+  font-size: 16px;
+
+  .input-value {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+
+    table tr td {
+      margin-left: 20px;
+      padding-left: 40px;
+    }
+
+    .convert-button {
+      padding-top: 10px;  
+      padding-bottom: 20px;    
+    }
+  }
+  .mo-phong {
+    text-align: left;
+    font-weight: bold;
+    color: white;
+    background-color: #ac1034;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    a {
+      padding-left: 10px;
+    }
+  }
+}
+$activeButtonColor: #ffcc00;
+$inactiveButtonColor: #ac1034;
+
+
+// Define button styles
+.button {
+  border: none;
+  padding: 8px 16px;
+  margin: 4px;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+  }
+
+  // Set default background color
+  background-color: $inactiveButtonColor;
+
+  // Set active background color for each button
+  &.active {
+    background-color: $activeButtonColor;
+  }
+}
