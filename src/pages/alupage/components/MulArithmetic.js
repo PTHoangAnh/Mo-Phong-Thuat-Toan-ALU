@@ -1,4 +1,6 @@
 import React from "react";
+import { unTwosComplement } from "../../../utilites/convertDecBin";
+import './mdArithmetic.scss'
 
 class MulArithmetic extends React.Component {
     constructor(props) {
@@ -37,7 +39,7 @@ class MulArithmetic extends React.Component {
     };
 
     calculateSteps = () => {
-        const { registerInputA_Bin, registerInputB_Bin, numBits } = this.props;
+        const { registerInputA_Bin, registerInputB_Bin, numBits, signA, signB } = this.props;
         const { isUnsigned } = this.state;
         const binaryA = registerInputA_Bin.padStart(numBits, '0').split('').map(bit => parseInt(bit, 10));
         const binaryB = registerInputB_Bin.padStart(numBits, '0').split('').map(bit => parseInt(bit, 10));
@@ -48,42 +50,68 @@ class MulArithmetic extends React.Component {
             Q: [...binaryA],
             M: [...binaryB],
             C: 0,
-            Q_1: 0,
             Count: numBits + 1,
         };
 
-        for (let i = 0; i < numBits + 1; i++) {
-            // Step để tính toán
-            const step = { A: [...registers.A], Q: [...registers.Q], M: [...registers.M], C: registers.C, addM: false, subM: false, dichP: false };
+        if (isUnsigned) {
+            if (!signA) {
+                registers.Q = unTwosComplement(registers.Q);
+            }
+            if (!signB) {
+                registers.M = unTwosComplement(registers.M);
+            }
+        }
 
-            // Kiểm tra bit cuối của Q
+        for (let i = 0; i < numBits + 1; i++) {
+            // Lưu thông tin các thanh ghi của mỗi bước
+            const step = {
+                A: [...registers.A],
+                Q: [...registers.Q],
+                M: [...registers.M],
+                C: 0,
+                Q_1: 0,
+                Atm: [],
+                Acm: [],
+                addM: false,
+                subM: false,
+                dichP: false
+            };
+
+            step.Q_1 = registers.C;
+           
+            // Nếu là nhân không dấu
             if (isUnsigned) {
-                // Nếu là nhân không dấu
                 if (registers.Q[numBits - 1] === 1) {
                     // A = A + M
                     registers.A = this.addBinary(registers.A, registers.M);
+                    step.Acm = registers.A;
                     step.addM = true;
                 }
+
             } else {
                 // Nếu là nhân có dấu
                 if (registers.Q[numBits - 1] === 1 && registers.C === 0) {
-                    // A = A + M
-                    registers.A = this.addBinary(registers.A, registers.M);
-                    step.addM = true;
-                } else if (registers.Q[numBits - 1] === 0 && registers.C === 1) {
                     // A = A - M
                     registers.A = this.subtractBinary(registers.A, registers.M);
+                    step.Atm = registers.A;
                     step.subM = true;
+                } else if (registers.Q[numBits - 1] === 0 && registers.C === 1) {
+                    // A = A + M
+                    registers.A = this.addBinary(registers.A, registers.M);
+                    step.Acm = registers.A;
+                    step.addM = true;
                 }
             }
-            // Lưu giá trị của Q[numBits - 1] trước khi dịch phải
-            registers.C = registers.Q[numBits - 1];
 
-            // Shift right A, Q
+            // Lưu giá trị của Q_1 trước khi dịch phải
+            registers.C = registers.Q[numBits - 1];
+            step.C = registers.C;
+
+            // Dịch phải A, Q
             registers.Q = [registers.A[numBits - 1], ...registers.Q.slice(0, numBits - 1)];
             registers.A = [registers.A[0], ...registers.A.slice(0, numBits - 1)];
-
             step.dichP = true;
+
             // Lưu bước tính toán
             steps.push(step);
         }
@@ -160,54 +188,108 @@ class MulArithmetic extends React.Component {
 
     render() {
         const { currentStep, steps, registers, isUnsigned } = this.state;
-        const { numBits } = this.props;
+        const { numBits, numA_Dec, numB_Dec } = this.props;
 
         const currentStepData = steps[currentStep] || {};
         const currentRegisters = currentStepData || registers;
 
 
         return (
-            <div className="mul-arithmetic">
-                <h2>Steps:</h2>
+            <div className="md-simulate">
+                <h2>Các bước mô phỏng tính toán</h2>
                 <div>
-                    <button onClick={this.handleUnsigned} disabled={isUnsigned}>Unsigned</button>
-                    <button onClick={this.handleSigned} disabled={!isUnsigned}>Signed</button>
-                    <button onClick={this.handlePreviousStep} disabled={currentStep === 0}>Prev</button>
-                    <button onClick={this.handleNextStep} disabled={currentStep === steps.length - 1}>Next</button>
+                    <button onClick={this.handleUnsigned} disabled={isUnsigned}>Nhân không dấu</button>
+                    <button onClick={this.handleSigned} disabled={!isUnsigned}>Nhân có dấu</button>
+                    <br/>
+                    <button onClick={this.handlePreviousStep} disabled={currentStep === 0}>Trước</button>
+                    <button onClick={this.handleNextStep} disabled={currentStep === steps.length - 1}>Sau</button>
                 </div>
                 <div>
-                    <h3>Current Step: {- currentStep + numBits}</h3>
+                    <h3>Bước hiện tại: {- currentStep + numBits}</h3>
+                    <h3>Thanh ghi M: {registers.M.join('')}</h3>
                     <table className="arithmetic-table">
                         <thead>
                             <tr>
                                 <th colSpan={numBits}>A</th>
                                 <th colSpan={numBits}>Q</th>
-                                <th>Tính</th>
-                                <th>Step</th>
+                                <th>Q-1</th>
+                                <th>Bộ đếm</th>
+                                <th>Mô tả</th>
                             </tr>
                         </thead>
                         <tbody>
                             {steps.map((step, index) => (
-                                <tr key={index} style={{ display: index <= currentStep ? 'table-row' : 'none' }}>
-                                    {/* registers A */}
-                                    {step.A && step.A.map((bit, index) => (
-                                        <td key={'A' + index}>
-                                            {bit}
+                                <React.Fragment key={index}>
+                                    <tr key={`row-${index}`} style={{ display: index <= currentStep ? 'table-row' : 'none' }}>
+                                        {/* registers A */}
+                                        {step.A && step.A.map((bit, index) => (
+                                            <td className="registersA" key={'A' + index}>
+                                                {bit}
+                                            </td>
+                                        ))}
+                                        {/* registers Q */}
+                                        {step.Q && step.Q.map((bit, index) => (
+                                            <td className="registersQ" key={'Q' + index}>
+                                                {bit}
+                                            </td>
+                                        ))}
+                                        {step.Q_1 && (
+                                            <td key={'Q-1'}>
+                                                {step.Q_1}
+                                            </td>
+                                        )}
+
+                                        {/* Bộ đếm */}
+                                        <td>{index}</td>
+
+                                        {/* Mô tả */}
+                                        <td>
+                                            {index === 0 ? 'Khởi tạo' : 'Dịch phải, BĐ <- BĐ-1'}
                                         </td>
-                                    ))}
-                                    {/* registers Q */}
-                                    {step.Q && step.Q.map((bit, index) => (
-                                        <td key={'Q' + index}>
-                                            {bit}
-                                        </td>
-                                    ))}
-                                    {/* Add or Sub */}
-                                    <td>
-                                        {index === 0 ? 'Khởi tạo' : step.addM ? 'Dịch phải, A + M' : step.subM ? 'Dịch phải, A - M' : step.dichP ? 'Dịch phải' : ''}                 
-                                    </td>
-                                    {/* Step */}
-                                    <td>{index}</td>
-                                </tr>
+                                    </tr>
+                                    {(index < numBits && step.subM) && (
+                                        <tr key={`row-${index}-subM`} style={{ display: index <= currentStep ? 'table-row' : 'none' }}>
+                                            {step.Atm && step.Atm.map((bit, index) => (
+                                                <td className="registersA" key={`A-${index}`}>
+                                                    {bit}
+                                                </td>
+                                            ))}
+                                            {step.Q && step.Q.map((bit, index) => (
+                                                <td className="registersQ" key={'Q' + index}>
+                                                    {bit}
+                                                </td>
+                                            ))}
+                                            {step.Q_1 && (
+                                                <td key={'Q-1'}>
+                                                    {step.Q_1}
+                                                </td>
+                                            )}
+                                            <td>.</td>
+                                            <td>A = A - M</td>
+                                        </tr>
+                                    )}
+                                    {(index < numBits && step.addM) && (
+                                        <tr key={`row-${index}-addM`} style={{ display: index <= currentStep ? 'table-row' : 'none' }}>
+                                            {step.Acm && step.Acm.map((bit, index) => (
+                                                <td className="registersA" key={`A-${index}`}>
+                                                    {bit}
+                                                </td>
+                                            ))}
+                                            {step.Q && step.Q.map((bit, index) => (
+                                                <td className="registersQ" key={'Q' + index}>
+                                                    {bit}
+                                                </td>
+                                            ))}
+                                            {step.Q_1 && (
+                                                <td key={'Q-1'}>
+                                                    {step.Q_1}
+                                                </td>
+                                            )}
+                                            <td>.</td>
+                                            <td>A = A + M</td>
+                                        </tr>
+                                    )}
+                                </React.Fragment>
                             ))}
                         </tbody>
                     </table>

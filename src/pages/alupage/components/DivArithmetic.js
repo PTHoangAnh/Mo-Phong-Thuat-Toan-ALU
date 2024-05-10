@@ -1,5 +1,5 @@
 import React from "react";
-import { twosComplement, unTwosComplement, binaryToDecimal } from "../../../utilites/convertDecBin";
+import { twosComplement, unTwosComplement, binaryToDecimal, decimalToBinary } from "../../../utilites/convertDecBin";
 
 class DivArithmetic extends React.Component {
     constructor(props) {
@@ -9,6 +9,7 @@ class DivArithmetic extends React.Component {
             currentStep: 0,
             registers: {
                 A: [],
+                ABin: [],
                 Q: [],
                 M: [],
                 Count: 0,
@@ -16,7 +17,7 @@ class DivArithmetic extends React.Component {
                 Du: []
             },
             ReThuong: [],
-            ReDu: []
+            ReDu: [],
         };
     }
 
@@ -39,13 +40,13 @@ class DivArithmetic extends React.Component {
 
     calculateSteps = () => {
         const { registerInputA_Bin, registerInputB_Bin, numBits, signA, signB } = this.props;
-        //const binaryA = registerInputA_Bin ? registerInputA_Bin.padStart(numBits, '0').split('').map(bit => parseInt(bit, 10)) : [...Array(numBits - 1).fill(0), 1];        
         const binaryA = registerInputA_Bin.padStart(numBits, '0').split('').map(bit => parseInt(bit, 10));
         const binaryB = registerInputB_Bin.padStart(numBits, '0').split('').map(bit => parseInt(bit, 10));
 
         const steps = [];
         let registers = {
             A: Array(numBits).fill(0),
+            ABin: [...binaryA],
             Q: [...binaryA],
             M: [...binaryB],
             Count: numBits + 1,
@@ -65,6 +66,7 @@ class DivArithmetic extends React.Component {
                 A: [...registers.A],
                 Q: [...registers.Q],
                 M: [...registers.M],
+                ABin: [...registers.ABin],
                 Adt: [],
                 Qdt: [],
                 Atm: [],
@@ -74,8 +76,7 @@ class DivArithmetic extends React.Component {
                 Thuong: [],
                 Du: [],
             };
-
-            // Shift left A, Q
+            // Dịch trái A, Q
             registers.A = [...registers.A.slice(1), registers.Q[0]];
             registers.Q = [...registers.Q.slice(1), 0];
             step.Adt = registers.A;
@@ -83,26 +84,24 @@ class DivArithmetic extends React.Component {
 
             step.dichT = true;
 
-            // Subtract M from  A
+            // Lấy A = A - M
             registers.A = this.subtractBinary(registers.A, registers.M);
             step.Atm = registers.A;
             step.subM = true;
 
             //  A >= 0 ?
             if (this.isLessThanZero(registers.A)) {
-                registers.Q[numBits - 1] = 0; // Set Q[0] to 0
-                registers.A = this.addBinary(registers.A, registers.M);
+                registers.Q[numBits - 1] = 0; //    Đặt Q[0] = 0
+                registers.A = this.addBinary(registers.A, registers.M); // Lấy A = A + M
                 step.addM = true;
             } else {
-                registers.Q[numBits - 1] = 1; // Set Q[0] to 1
+                registers.Q[numBits - 1] = 1; // Đặt Q[0] = 1
             }
-            console.log("Tai", i, " A = ", registers.A, " Q = ", registers.Q);
-            //Hiệu chỉnh dấu sau khi tính toán xong
+
+            //Hiệu chỉnh dấu sau khi tính toán xong dựa trên dấu của A và B
             if (i === numBits - 1 && signA && signB) {
                 ReThuong = [...registers.Q];
                 ReDu = [...registers.A];
-                console.log("truong hop 1 tai i = :", i, " A = ", registers.A, " Q = ", registers.Q);
-                console.log("truong hop 1: Du = ", this.state.Du, " Thuong = ", this.state.Thuong);
             }
             else if (i === numBits - 1 && signA && !signB) {
 
@@ -125,7 +124,6 @@ class DivArithmetic extends React.Component {
         }
 
         this.setState({ steps, registers, ReDu, ReThuong });
-        console.log("truong hop 1: Du = ", this.state.Du, " Thuong = ", this.state.Thuong);
     }
 
     isLessThanZero = (register) => {
@@ -173,26 +171,27 @@ class DivArithmetic extends React.Component {
 
     render() {
         const { currentStep, steps, registers } = this.state;
-        const { numBits } = this.props;
+        const { numBits, numA_Dec, numB_Dec } = this.props;
         const currentStepData = steps[currentStep] || {};
         const currentRegisters = currentStepData || registers;
 
         return (
-            <div className="div-arithmetic">
-                <h2>Steps:</h2>
+            <div className="md-simulate">
+                <h2>Các bước mô phỏng tính toán</h2>
                 <div>
-                    <button onClick={this.handlePreviousStep} disabled={currentStep === 0}>Prev</button>
-                    <button onClick={this.handleNextStep} disabled={currentStep === steps.length - 1}>Next</button>
+                    <button onClick={this.handlePreviousStep} disabled={currentStep === 0}>Trước</button>
+                    <button onClick={this.handleNextStep} disabled={currentStep === steps.length - 1}>Sau</button>
                 </div>
                 <div>
-                    <h3>Phép chia: {binaryToDecimal(registers.A)} = {registers.A.join('')} / {registers.M.join('')}</h3>
+                    <h3>Phép chia: {this.props.numA_Dec} / {this.props.numB_Dec} = {registers.ABin.join('')} / {registers.M.join('')}</h3>
+                    <h4>Thanh ghi M: {registers.M.join('')}</h4>
                     <table className="arithmetic-table">
                         <thead>
                             <tr>
                                 <th colSpan={numBits}>A</th>
                                 <th colSpan={numBits}>Q</th>
                                 <th>Tính</th>
-                                <th>Step</th>
+                                <th>Bộ đếm</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -250,6 +249,24 @@ class DivArithmetic extends React.Component {
                                             <td></td>
                                         </tr>
                                     )}
+
+                                    {(index === numBits) && (
+                                        <tr key={`row-${index}-result`}  style={{ display: index <= currentStep ? 'table-row' : 'none' }}>
+                                            {this.state.ReDu && this.state.ReDu.map((bit, index) => (
+                                                <td key={`A-${index}`}>
+                                                    -
+                                                </td>
+                                            ))}
+                                            {this.state.ReThuong && this.state.ReThuong.map((bit, index) => (
+                                                <td key={`Q-${index}`}>
+                                                    -
+                                                </td>
+                                            ))}
+                                            <td>-----------------------</td>
+                                            <td>---</td>
+                                        </tr>
+                                    )}
+
                                     {(index === numBits) && (
                                         <tr key={`row-${index}-result`} style={{ display: index <= currentStep ? 'table-row' : 'none' }}>
                                             {this.state.ReDu && this.state.ReDu.map((bit, index) => (
@@ -262,16 +279,12 @@ class DivArithmetic extends React.Component {
                                                     {bit}
                                                 </td>
                                             ))}
-                                            <td>A = Dư</td>
-                                            <td>Q = Thương</td>
+                                            <td>A = Dư, Q = Thương</td>
+                                            <td></td>
                                         </tr>
                                     )}
                                 </React.Fragment>
                             ))}
-
-
-
-
                         </tbody>
 
 

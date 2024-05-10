@@ -1,6 +1,6 @@
 import React from "react";
 import { toast } from 'react-toastify';
-import './arithmetic.scss'
+import './asArithmetic.scss'
 
 class AddArithmetic extends React.Component {
     constructor(props) {
@@ -132,7 +132,7 @@ class AddArithmetic extends React.Component {
                         </tbody>
                     </table>
                 </div>
-                <h2>Các bước tính toán</h2>
+                <h2>Các bước mô phỏng tính toán</h2>
                 <div>
                     <button onClick={this.handlePreviousStep} disabled={currentStep === 0}>Trước</button>
                     <button onClick={this.handleNextStep} disabled={currentStep === steps.length - 1}>Tiếp</button>

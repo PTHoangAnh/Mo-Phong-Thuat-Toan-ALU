@@ -1,6 +1,6 @@
 import React from "react";
 import { toast } from 'react-toastify';
-import './arithmetic.scss';
+import './asArithmetic.scss';
 
 class SubArithmetic extends React.Component {
     constructor(props) {
@@ -147,7 +147,7 @@ class SubArithmetic extends React.Component {
                         </tbody>
                     </table>
                 </div>
-                <h2>Các bước tính toán</h2>
+                <h2>Các bước mô phỏng tính toán</h2>
                 <div>
                     <button onClick={this.handlePreviousStep} disabled={currentStep === 0}>Prev</button>
                     <button onClick={this.handleNextStep} disabled={currentStep === steps.length - 1}>Next</button>

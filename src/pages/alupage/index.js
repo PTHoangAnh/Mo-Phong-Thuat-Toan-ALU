@@ -252,6 +252,8 @@ class TestALU extends React.Component {
                     <MulArithmetic
                         registerInputA_Bin={registerInputA_Bin}
                         registerInputB_Bin={registerInputB_Bin}
+                        numA_Dec={registerInputA_Dec}
+                        numB_Dec={registerInputB_Dec}
                         signA={this.state.signA}
                         signB={this.state.signB}
                         numBits={this.state.numBits}
@@ -264,6 +266,8 @@ class TestALU extends React.Component {
                     <DivArithmetic
                         registerInputA_Bin={registerInputA_Bin}
                         registerInputB_Bin={registerInputB_Bin}
+                        numA_Dec={registerInputA_Dec}
+                        numB_Dec={registerInputB_Dec}
                         signA={this.state.signA}
                         signB={this.state.signB}
                         numBits={this.state.numBits}
