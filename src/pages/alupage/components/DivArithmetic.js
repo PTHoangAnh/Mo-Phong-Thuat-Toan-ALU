@@ -215,7 +215,7 @@ class DivArithmetic extends React.Component {
                                             {index === 0 ? 'Khởi tạo' : ''}
                                         </td>
                                         {/* Step */}
-                                        <td>{index}</td>
+                                        <td>{- index + numBits}</td>
                                     </tr>
                                     {(index < numBits && step.dichT) && (
                                         <tr key={`row-${index}-dichT`} style={{ display: index <= currentStep ? 'table-row' : 'none' }}>

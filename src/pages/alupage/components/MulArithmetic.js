@@ -240,7 +240,7 @@ class MulArithmetic extends React.Component {
                                         )}
 
                                         {/* Bộ đếm */}
-                                        <td>{index}</td>
+                                        <td>{- index + numBits}</td>
 
                                         {/* Mô tả */}
                                         <td>

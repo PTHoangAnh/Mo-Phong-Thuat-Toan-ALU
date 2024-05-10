@@ -72,7 +72,7 @@ class TestALU extends React.Component {
         if (this.state.registerInputB_Dec >= 0) {
             signDecB = true;
         }
-        
+
         const binA = decimalToBinary(this.state.registerInputA_Dec, this.state.numBits);
         const binB = decimalToBinary(this.state.registerInputB_Dec, this.state.numBits);
         this.setState({
@@ -202,25 +202,25 @@ class TestALU extends React.Component {
                         className={`button ${activeComponent === 'AddArithmetic' ? 'active' : ''}`}
                         onClick={() => this.handleOptionButtonClick('AddArithmetic')}
                     >
-                        Add
+                        Cộng
                     </button>
                     <button
                         className={`button ${activeComponent === 'SubArithmetic' ? 'active' : ''}`}
                         onClick={() => this.handleOptionButtonClick('SubArithmetic')}
                     >
-                        Sub
+                        Trừ
                     </button>
                     <button
                         className={`button ${activeComponent === 'MulArithmetic' ? 'active' : ''}`}
                         onClick={() => this.handleOptionButtonClick('MulArithmetic')}
                     >
-                        Mul
+                        Nhân
                     </button>
                     <button
                         className={`button ${activeComponent === 'DivArithmetic' ? 'active' : ''}`}
                         onClick={() => this.handleOptionButtonClick('DivArithmetic')}
                     >
-                        Div
+                        Chia
                     </button>
                 </div> <hr />
                 <div className="mo-phong">
