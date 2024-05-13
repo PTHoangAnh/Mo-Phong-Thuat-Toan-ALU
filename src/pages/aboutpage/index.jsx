@@ -25,7 +25,7 @@ class NguyenLy extends React.Component {
                 >
                     <Page pageNumber={pageNumber} />
                 </Document>
-                <p>Page {pageNumber} of {numPages}</p>
+                <p>Page {pageNumber} off {numPages}</p>
             </div>
         )
     }
