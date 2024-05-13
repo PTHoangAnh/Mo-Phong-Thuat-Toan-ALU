@@ -9,7 +9,7 @@ class InputField extends React.Component {
                     <a>{name}: </a>
                     <input
                         type="number"
-                        placeholder="Input"
+                        placeholder="Nhập"
                         value={value}
                         onChange={onChange}
                     />

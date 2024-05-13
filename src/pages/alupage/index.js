@@ -148,12 +148,12 @@ class TestALU extends React.Component {
                         <tr>
                             <td>
                                 <InputField
-                                    name="Decimal A"
+                                    name="Số thập phân A"
                                     value={registerInputA_Dec}
                                     onChange={(event) => this.handleOnChange('registerInputA_Dec', event)}
                                 />
                                 <InputField
-                                    name="Decimal B"
+                                    name="Số thập phân B"
                                     value={registerInputB_Dec}
                                     onChange={(event) => this.handleOnChange('registerInputB_Dec', event)}
                                 />
@@ -161,12 +161,12 @@ class TestALU extends React.Component {
 
                             <td>
                                 <InputField
-                                    name="Register A_Bin"
+                                    name="Số nhị phân A"
                                     value={registerInputA_Bin}
                                     onChange={(event) => this.handleOnChange('registerInputA_Bin', event)}
                                 />
                                 <InputField
-                                    name="Register B_Bin"
+                                    name="Số nhị phân B"
                                     value={registerInputB_Bin}
                                     onChange={(event) => this.handleOnChange('registerInputB_Bin', event)}
                                 />

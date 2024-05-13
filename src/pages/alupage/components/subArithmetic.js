@@ -199,15 +199,15 @@ class SubArithmetic extends React.Component {
                     <table className="flag-table">
                         <tbody>
                             <tr>
-                                <td>Cờ Sum </td>
+                                <td>Cờ Tổng </td>
                                 <td >{steps[currentStep]?.sum}</td>
                             </tr>
                             <tr>
-                                <td>Cờ Carry </td>
+                                <td>Cờ Nhớ </td>
                                 <td >{steps[currentStep]?.carry}</td>
                             </tr>
                             <tr>
-                                <td>Cờ Overflow </td>
+                                <td>Cờ Tràn </td>
                                 <td >{flagOverflow ? '1' : '0'}</td>
                             </tr>
                         </tbody>

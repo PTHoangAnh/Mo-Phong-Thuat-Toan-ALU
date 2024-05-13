@@ -9,7 +9,7 @@ class Nav extends React.Component {
                 <NavLink to="/" activeClassName="active" exact={true}>
                     Mô phỏng
                 </NavLink>
-                <NavLink to="/about" activeClassName="active">
+                <NavLink to="/nguyenly" activeClassName="active">
                     Nguyên lý
                 </NavLink>
             </div>
