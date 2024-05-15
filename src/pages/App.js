@@ -1,5 +1,5 @@
 import './App.scss';
-import NguyenLy from './aboutpage/index.jsx';
+import NguyenLy from './nguyenlypage/index.jsx';
 import ALU from './alupage/index.js';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,7 +20,7 @@ function App() {
           <Nav />
           <Routes>
             <Route path="/" element={<ALU />} />
-            <Route path="/about" element={<NguyenLy pdfUrl="./assets/pdf/nckhnguyenly.pdf"/>} />
+            <Route path="/nguyenly" element={<NguyenLy/>} />
           </Routes>
         </header>
 

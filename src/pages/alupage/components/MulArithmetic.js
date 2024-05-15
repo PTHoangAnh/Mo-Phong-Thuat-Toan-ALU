@@ -202,7 +202,7 @@ class MulArithmetic extends React.Component {
                     <button onClick={this.handleSigned} disabled={!isUnsigned}>Nhân có dấu</button>
                     <br/>
                     <button onClick={this.handlePreviousStep} disabled={currentStep === 0}>Trước</button>
-                    <button onClick={this.handleNextStep} disabled={currentStep === steps.length - 1}>Sau</button>
+                    <button onClick={this.handleNextStep} disabled={currentStep === steps.length - 1}>Tiếp</button>
                 </div>
                 <div>
                     <h3>Bước hiện tại: {- currentStep + numBits}</h3>

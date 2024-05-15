@@ -1,0 +1,40 @@
+.nguyenly {
+    margin-left: 20px; //căn lề trái
+}
+
+h1, h3, h4 {
+    font-style: italic; // Chữ nghiêng
+}
+
+h1, h3, h4, b {
+    font-weight: bold; // Chu viet dam
+    text-align: left; // Căn lề:trái
+}
+
+p {
+    text-align: left;
+}
+
+img {
+    display: block; // Đảm bảo hình ảnh hiển thị trên một dòng riêng biệt
+    margin: 0 auto; // Canh giữa theo chiều ngang
+}
+
+// Custom styles for the table of contents
+ul {
+    list-style-type: none; // Xoa dau cham
+    padding-left: 0; // Can le trai
+}
+
+ul li {
+    margin-bottom: 5px; // Khoang cach giua cac muc
+}
+
+ul li:before {
+    content: "•"; // Dau cham tron lam dau hieu cho muc
+    margin-right: 5px;
+}
+.center {
+    text-align: center;
+}
+

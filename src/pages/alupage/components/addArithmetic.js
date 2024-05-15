@@ -29,7 +29,7 @@ class AddArithmetic extends React.Component {
             this.calculateSteps();
         }
     }
-
+    
     calculateSteps() {
         const { registerInputA_Bin, registerInputB_Bin, numBits } = this.props;
         const binaryA = registerInputA_Bin.padStart(numBits, '0').split('').map(bit => parseInt(bit, 10));

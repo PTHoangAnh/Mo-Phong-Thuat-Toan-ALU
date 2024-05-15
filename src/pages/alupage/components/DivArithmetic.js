@@ -180,7 +180,7 @@ class DivArithmetic extends React.Component {
                 <h2>Các bước mô phỏng tính toán</h2>
                 <div>
                     <button onClick={this.handlePreviousStep} disabled={currentStep === 0}>Trước</button>
-                    <button onClick={this.handleNextStep} disabled={currentStep === steps.length - 1}>Sau</button>
+                    <button onClick={this.handleNextStep} disabled={currentStep === steps.length - 1}>Tiếp</button>
                 </div>
                 <div>
                     <h3>Phép chia: {this.props.numA_Dec} / {this.props.numB_Dec} = {registers.ABin.join('')} / {registers.M.join('')}</h3>

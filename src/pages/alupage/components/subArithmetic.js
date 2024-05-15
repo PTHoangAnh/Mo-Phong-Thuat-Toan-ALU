@@ -149,8 +149,8 @@ class SubArithmetic extends React.Component {
                 </div>
                 <h2>Các bước mô phỏng tính toán</h2>
                 <div>
-                    <button onClick={this.handlePreviousStep} disabled={currentStep === 0}>Prev</button>
-                    <button onClick={this.handleNextStep} disabled={currentStep === steps.length - 1}>Next</button>
+                    <button onClick={this.handlePreviousStep} disabled={currentStep === 0}>Trước</button>
+                    <button onClick={this.handleNextStep} disabled={currentStep === steps.length - 1}>Tiếp</button>
                 </div>
                 <div>
                     <h3>Bước hiện tại: {currentStep + 1}</h3>
@@ -185,7 +185,7 @@ class SubArithmetic extends React.Component {
                                 ))}
                             </tr>
                             <tr>
-                                <td>Thanh ghi Result</td>
+                                <td>Kết quả</td>
                                 {Array(numBits)
                                     .fill()
                                     .map((_, index) => (
