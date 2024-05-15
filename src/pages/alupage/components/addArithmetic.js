@@ -7,7 +7,6 @@ class AddArithmetic extends React.Component {
         super(props);
         this.state = {
             steps: [],
-            sumResult: [],
             binaryResult_Array: [],
             currentStep: 0,
             flagOverflow: false,// Khởi tạo cờ Overflow
@@ -37,7 +36,6 @@ class AddArithmetic extends React.Component {
         let result = [];
         let carry = 0;
         let steps = [];
-        let sumResult = [];  // nên lưu sum mỗi step vào mảng này để xử lý say này
         let binaryResult_Array = [];
 
         for (let i = 0; i < numBits; i++) {
@@ -69,7 +67,7 @@ class AddArithmetic extends React.Component {
             const lastStepCarry = steps[currentStep + 1].carry;
             if (lastStepCarry === 1) {
                 this.setState({ flagOverflow: true });
-                toast.warn(`Register Overflow`);
+                toast.warn(`Tràn bộ nhớ`);
             }
         }
     }

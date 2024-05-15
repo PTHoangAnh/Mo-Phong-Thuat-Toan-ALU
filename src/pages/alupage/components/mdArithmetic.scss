@@ -1,9 +1,29 @@
-.md-simulate {
-    .arithmetic-table {
-        // td.registersA:first-child{
-        //     margin-left: 20px;
-        //     padding-right: 20px;
-        //     font-size: 40px;
-        // }
-    }
+.md-simulate .arithmetic-table {
+    border-collapse: collapse;
 }
+
+.md-simulate .arithmetic-table td, .md-simulate .arithmetic-table th {
+    border: 2px solid black;
+    padding: 8px;
+    text-align: center;
+}
+
+
+
+// md-simulate .arithmetic-table: arithmetic-table nằm trong phần tử có lớp .md-simulate. Điều này đảm bảo rằng các quy tắc CSS sẽ chỉ được áp dụng cho các bảng cụ thể trong phần tử được định dạng bằng lớp .md-simulate.
+
+// border-collapse: collapse;: Quy tắc này thiết lập việc hợp nhất các đường viền của các ô trong bảng. Khi collapse được áp dụng, các đường viền giữa các ô sẽ không được hiển thị, và các đường viền ngoại vi của bảng sẽ được gộp lại thành một.
+
+// .md-simulate .arithmetic-table td, .md-simulate .arithmetic-table th: Đây là cách chọn tất cả các ô <td> và <th> trong bảng có lớp .arithmetic-table nằm trong phần tử có lớp .md-simulate.
+
+// border: 1px solid black;: Quy tắc này đặt đường viền cho mỗi ô trong bảng, bao gồm cả ô dữ liệu (<td>) và ô tiêu đề (<th>). Đường viền này có chiều rộng là 1px, màu sắc là đen và kiểu là solid (liền).
+
+// padding: 8px;: Quy tắc này đặt khoảng cách nội dung bên trong của mỗi ô trong bảng, giúp tạo ra một khoảng cách giữa nội dung và đường viền của ô.
+
+// text-align: center;: Quy tắc này canh chỉnh nội dung của mỗi ô trong bảng vào giữa ngang, đảm bảo rằng nội dung trong mỗi ô sẽ được căn giữa theo chiều ngang.
+
+
+
+
+
+
